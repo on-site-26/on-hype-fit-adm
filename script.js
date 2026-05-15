@@ -31,6 +31,16 @@ function getLocalDate() {
     const dia = String(d.getDate()).padStart(2, '0');
     return `${ano}-${mes}-${dia}`;
 }
+function checkLogin() {
+    const u = document.getElementById('user-input').value;
+    const p = document.getElementById('pass-input').value;
+    if(u === "Gabriella" && p === "123cg") {
+        sessionStorage.setItem('isLogged', 'true');
+        showApp();
+    } else alert("Usuário ou senha incorretos!");
+}
+
+function logout() { sessionStorage.removeItem('isLogged'); location.reload();}
 
 window.onload = function() {
     // Escuta e puxa todos os pedidos salvos na nuvem em tempo real
@@ -54,17 +64,6 @@ window.onload = function() {
 
     if(sessionStorage.getItem('isLogged') === 'true') showApp();
 };
-
-function checkLogin() {
-    const u = document.getElementById('user-input').value;
-    const p = document.getElementById('pass-input').value;
-    if(u === "Gabriella" && p === "123cg") {
-        sessionStorage.setItem('isLogged', 'true');
-        showApp();
-    } else alert("Usuário ou senha incorretos!");
-}
-
-function logout() { sessionStorage.removeItem('isLogged'); location.reload(); }
 
 function showApp() {
     document.getElementById('login-overlay').style.display = "none";
