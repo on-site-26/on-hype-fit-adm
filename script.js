@@ -63,7 +63,7 @@ window.onload = function() {
 function checkLogin() {
     const u = document.getElementById('user-input').value;
     const p = document.getElementById('pass-input').value;
-    if(u === "Gabriella" && p === "12345678") {
+    if(u === "Gabriella" && p === "123cg") {
         sessionStorage.setItem('isLogged', 'true');
         showApp();
     } else alert("Usuário ou senha incorretos!");
