@@ -14,7 +14,6 @@ const firebaseConfig = {
 // Inicializa o Firebase e força a conexão com o Banco de Dados Online
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-    };
     
     Chart.register(ChartDataLabels);
 
