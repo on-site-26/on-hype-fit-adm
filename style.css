@@ -29,7 +29,7 @@ body { background-color: var(--light); color: var(--secondary); }
 #main-content { display: none; padding: 20px; }
 .container { max-width: 1200px; margin: auto; }
 
-/* Cabeçalho organizado para não sobrepor */
+/* --- ESTILO DO CABEÇALHO (DESKTOP E MOBILE) --- */
 header { 
     display: flex; 
     justify-content: space-between; 
@@ -37,34 +37,96 @@ header {
     margin-bottom: 30px; 
     border-bottom: 3px solid var(--primary); 
     padding-bottom: 15px;
-    flex-wrap: wrap; /* Permite quebrar linha se não couber */
+    flex-wrap: wrap;
     gap: 15px;
+    text-align: center;
 }
 
-.header-title-container {
+/* Força os textos a ficarem sempre centralizados */
+header div, .header-title-container {
     flex: 1;
     text-align: center;
-    order: 2; /* Mantém o título no meio */
-    min-width: 200px;
+    min-width: 250px;
+    order: 2; /* Fica no meio no desktop */
 }
 
-.btn-expense-trigger { order: 1; } /* Botão despesa na esquerda */
-.btn-logout { order: 3; }          /* Botão sair na direita */
+header h1, header p {
+    text-align: center;
+    width: 100%;
+}
 
-/* Ajuste específico para telas bem pequenas (celulares) */
-@media (max-width: 480px) {
-    .header-title-container {
-        order: 1;
+.btn-expense-trigger { 
+    background: var(--warning); 
+    color: white; 
+    padding: 8px 15px; 
+    font-size: 0.8rem; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    order: 1; /* Esquerda no desktop */
+}
+
+.btn-logout { 
+    background: var(--danger); 
+    color: white; 
+    padding: 8px 15px; 
+    font-size: 0.8rem; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    order: 3; /* Direita no desktop */
+}
+
+/* Regra específica para Celular (Mobile) */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column; /* Alinha tudo em linha vertical */
+        align-items: center;
+        justify-content: center;
+    }
+    
+    header div, .header-title-container {
+        order: 1; /* Texto vai para o topo */
         width: 100%;
-        flex: none;
         margin-bottom: 5px;
     }
-    .btn-expense-trigger { order: 2; flex: 1; }
-    .btn-logout { order: 3; flex: 1; }
+
+    /* Container invisível para deixar os botões um do lado do outro abaixo do texto */
+    .btn-expense-trigger {
+        order: 2;
+        width: 48%;
+        display: inline-block;
+    }
+    
+    .btn-logout {
+        order: 3;
+        width: 48%;
+        display: inline-block;
+    }
 }
 
-.btn-logout { position: absolute; right: 0; background: var(--danger); color: white; padding: 8px 15px; font-size: 0.8rem; cursor: pointer; border-radius: 8px; }
-.btn-expense-trigger { position: absolute; left: 0; background: var(--warning); color: white; padding: 8px 15px; font-size: 0.8rem; cursor: pointer; border-radius: 8px; }
+/* --- AJUSTE DOS PRODUTOS PARA NÃO SAIR DA TELA --- */
+.product-selector div[style*="display: flex"] {
+    display: flex !important;
+    gap: 8px !important;
+    margin-bottom: 10px;
+    flex-wrap: wrap; /* Faz quebrar a linha no celular se não couber */
+}
+
+#prod-select {
+    flex: 2;
+    min-width: 160px; /* Garante tamanho mínimo para o texto */
+    width: 100%;
+}
+
+#prod-qty {
+    flex: 0.5;
+    min-width: 60px; /* Impede que o campo de número fique invisível */
+    width: 100%;
+}
+
+.product-selector button {
+    padding: 10px 20px;
+    min-width: 50px;
+}
 
 section { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
 h2 { margin-bottom: 20px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
