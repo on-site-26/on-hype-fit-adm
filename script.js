@@ -1,17 +1,19 @@
-    // ==========================================
-    // CONFIGURAÇÃO DO FIREBASE (PARA SINCRONIZAR TUDO)
-    // ==========================================
-    // Para funcionar em qualquer lugar, você deve criar um projeto no Firebase Console
-    // e substituir os dados abaixo:
-    const firebaseConfig = {
-        apiKey: "AIzaSyCH5HAgQCkNKPtHTAISBHCbwBw1Gbj_Pxc",
-        authDomain: "on-hype-fit.firebaseapp.com",
-        databaseURL: "https://on-hype-fit-default-rtdb.firebaseio.com",
-        projectId: "on-hype-fit",
-        storageBucket: "on-hype-fit.firebasestorage.app",
-        messagingSenderId: "871484604932",
-        appId: "1:871484604932:web:4a20243e0cedc21e756b51",
-        measurementId: "G-KN9EVFMYXH"
+// CONFIGURAÇÃO DO FIREBASE ATUALIZADA E ATIVA
+// ==========================================
+const firebaseConfig = {
+    apiKey: "AIzaSyCH5HAgQCkNKPthTAISBHCbwbw1Gbj_Pxc",
+    authDomain: "on-hype-fit.firebaseapp.com",
+    databaseURL: "https://on-hype-fit-default-rtdb.firebaseio.com",
+    projectId: "on-hype-fit",
+    storageBucket: "on-hype-fit.appspot.com",
+    messagingSenderId: "871484604932",
+    appId: "1:871484604932:web:4a20243e0cedc21e756b51",
+    measurementId: "G-KN9EVFMYXH"
+};
+
+// Inicializa o Firebase e força a conexão com o Banco de Dados Online
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
     };
     
     Chart.register(ChartDataLabels);
@@ -31,8 +33,26 @@ function getLocalDate() {
     return `${ano}-${mes}-${dia}`;
 }
 
-// Carregar dados iniciais
 window.onload = function() {
+    // Escuta e puxa todos os pedidos salvos na nuvem em tempo real
+    db.ref('orders').on('value', snapshot => {
+        orders = [];
+        snapshot.forEach(child => { 
+            orders.push(child.val()); 
+        });
+        // Atualiza a tabela na tela do usuário instantaneamente
+        filterList('hoje'); 
+    });
+
+    // Escuta e puxa todas as despesas salvas na nuvem em tempo real
+    db.ref('expenses').on('value', snapshot => {
+        expenses = [];
+        snapshot.forEach(child => { 
+            expenses.push(child.val()); 
+        });
+        if(typeof renderExpenseTable === "function") renderExpenseTable();
+    });
+
     if(sessionStorage.getItem('isLogged') === 'true') showApp();
 };
 
@@ -83,8 +103,9 @@ function removeItem(index) { currentItems.splice(index, 1); updateCurrentItemsLi
 function saveOrder() {
     const name = document.getElementById('cust-name').value;
     if(!name || currentItems.length === 0) return alert("Preencha o nome e adicione produtos!");
+    
     const order = {
-        id: editingId || Date.now(),
+        id: editingId || Date.now().toString(),
         date: document.getElementById('order-date').value,
         name: name,
         items: [...currentItems],
@@ -96,11 +117,17 @@ function saveOrder() {
         delivery: document.getElementById('delivery-status').value,
         location: document.getElementById('order-loc').value
     };
-    if(editingId) orders[orders.findIndex(o => o.id === editingId)] = order;
-    else orders.push(order);
-    localStorage.setItem('hype_orders', JSON.stringify(orders));
-    resetForm();
-    filterList('hoje');
+
+    // Força o salvamento na nuvem do Firebase Realtime Database
+    db.ref('orders/' + order.id).set(order)
+        .then(() => {
+            resetForm();
+            alert("Pedido sincronizado na nuvem com sucesso!");
+        })
+        .catch((error) => {
+            console.error("Erro ao salvar no Firebase: ", error);
+            alert("Erro de conexão! O dado não pôde ser enviado para a nuvem.");
+        });
 }
 
 function resetForm() {
