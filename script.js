@@ -235,15 +235,21 @@ function renderTable(data, showDate) {
 function filterList(type) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     const hoje = getLocalDate();
+    
     if(type === 'hoje') { 
         const btn = document.getElementById('btn-hoje');
         if(btn) btn.classList.add('active'); 
         renderTable(orders.filter(o => o.date === hoje), false); 
-    } else { 
+    } else if(type === '30dias') { 
         const btn = document.getElementById('btn-30');
         if(btn) btn.classList.add('active'); 
         const d30 = new Date(); d30.setDate(d30.getDate()-30); 
         renderTable(orders.filter(o => new Date(o.date) >= d30), true); 
+    } else if(type === 'todos') {
+        const btn = document.getElementById('btn-todos');
+        if(btn) btn.classList.add('active'); 
+        // Exibe todos os pedidos sem filtros de data, mostrando a coluna "Data" (true)
+        renderTable(orders, true); 
     }
 }
 
