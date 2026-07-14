@@ -93,10 +93,11 @@
 
         <section>
             <h2>📋 Gestão de Pedidos</h2>
+            <!-- Código corrigido (COPIE E SUBSTITUA): -->
             <div class="tabs">
                 <button class="tab-btn active" id="btn-hoje" onclick="filterList('hoje')">Hoje</button>
                 <button class="tab-btn" id="btn-30" onclick="filterList('30dias')">Últimos 30 Dias</button>
-                <button class="tab-btn" id="btn-30" onclick="filterList('30dias')">Todo o período</button>
+                <button class="tab-btn" id="btn-todos" onclick="filterList('todos')">Todo o período</button>
             </div>
             <div class="table-container">
                 <table><thead id="table-head"></thead><tbody id="table-body"></tbody></table>
